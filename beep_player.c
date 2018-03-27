@@ -4,7 +4,7 @@
 #include <linux/kd.h>
 #include <unistd.h>
 
-#define SEMIBREVE 1500
+#define SEMIBREVE 2500
 
 #define DUPLEX_LONGA SEMIBREVE*8
 
@@ -25,7 +25,7 @@
 
 #define HEMIDEMISEMIQUAVER SEMIBREVE/64
 
-
+#define REST 0
 #define C03 131
 #define D03 147
 #define E03 164
@@ -52,6 +52,24 @@ int main(int argc, char *argv[])
 	
 	play_note(&fd, G03, QUAVER);
 	play_note(&fd, C04, CROTCHET_DOTTED);
+	play_note(&fd, B03, QUAVER);
+	play_note(&fd, D04, QUAVER);
+	play_note(&fd, C04, QUAVER);
+	play_note(&fd, G03, QUAVER);
+	play_note(&fd, E03, QUAVER);
+	play_note(&fd, A03, MINIM);
+	play_note(&fd, F03, CROTCHET);
+
+	play_note(&fd, REST, QUAVER);
+
+	play_note(&fd, A03, QUAVER);
+	play_note(&fd, D04, CROTCHET_DOTTED);
+	play_note(&fd, C04, QUAVER);
+	play_note(&fd, B03, QUAVER);
+	play_note(&fd, A03, QUAVER);
+	play_note(&fd, G03, QUAVER);
+	play_note(&fd, F03, QUAVER);
+	play_note(&fd, E03, MINIM);
 
 	close_player(&fd);
 	return 0;
@@ -69,7 +87,11 @@ int close_player(int *fd) {
 }
 
 void play_note(int *fd, int freq, int duration) {
-	ioctl(*fd, KIOCSOUND, 1193180/freq);
+	if (freq != 0)
+		ioctl(*fd, KIOCSOUND, 1193180/freq);
+	else
+		ioctl(*fd, KIOCSOUND, 0);
+
 	usleep(duration * 1000);
 }
 
