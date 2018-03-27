@@ -94,18 +94,17 @@ int main(int argc, char *argv[])
 	close_player(&fd);
 
 	FILE *fr = fopen("file.sb", "rb");
+
+	if (fr != NULL) {
 	short noter, durationr;
 	noter = durationr = -1;
-	if (fr != NULL) {
-		/*while (durationr != 0) {*/
-			/*fread(&noter, sizeof(short), 1, fr);*/
-			/*fread(&durationr, sizeof(short), 1, fr);*/
-			/*printf("%d Hz, %d ms\n", noter, noter);*/
-		/*}*/
 
-		fread(&noter, 2, 1, fr);
-		fread(&durationr, 2, 1, fr);
-		printf("%d Hz, %d ms\n", noter, durationr);
+		while (durationr != 0) {
+			fread(&noter, sizeof(short), 1, fr);
+			fread(&durationr, sizeof(short), 1, fr);
+			printf("%d Hz, %d ms\n", noter, durationr);
+		}
+
 		fclose(fr);
 	}
 
@@ -134,9 +133,8 @@ void play_note(int *fd, int freq, int duration)
 	/*ioctl(*fd, KDMKTONE, arg);*/
 	/*usleep(duration * 1000);*/
 	if (fb != NULL) {
-		printf("%d\n", freq);
-		fwrite(&arg, sizeof(arg), 1, fb);
-		/*fwrite(&duration, sizeof(duration), 1, fb);*/
+		fwrite(&freq, sizeof(freq), 1, fb);
+		fwrite(&duration, sizeof(duration), 1, fb);
 	}
 }
 
