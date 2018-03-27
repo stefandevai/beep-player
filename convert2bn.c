@@ -1,3 +1,23 @@
+/**
+ * convert2bn -- converts .ss file format to .bn file format used by beep-player.
+ *
+ * AUTHOR: Stefan Devai
+ * Created in March 27, 2018
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -57,7 +77,13 @@ int convert(const char* sn_path)
 }
 
 int get_note(const char* line) {
+	int flat = 0, sharp = 0;
 	float frequency = (float)0;
+
+	if (line[2] == '#') 
+		sharp = 1;
+	else if (line[2] == 'b') 
+		flat = 1;
 
 	switch(line[0]) {
 		case 'A':
@@ -174,8 +200,10 @@ int get_note(const char* line) {
 			break;
 	}
 
-	if (line[2] == '#') 
-		frequency *= 1.05946;
+	if (sharp) 
+		frequency = SHARP(frequency);
+	else if (flat) 
+		frequency = FLAT(frequency);
 
 	return (int)frequency;
 }
