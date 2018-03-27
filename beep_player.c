@@ -1,3 +1,6 @@
+/**
+ * @author Stefan Devai
+ */
 #include <stdio.h>
 #include <fcntl.h>
 #include <stropts.h>
@@ -6,11 +9,65 @@
 
 #include "note_defs.h"
 
+/**
+ * Opens /dev/console in readonly mode 
+ *
+ * @param fd  a pointer to a int where we will
+ * 							point the file descriptor for console.
+ *
+ * @return -1 if there was an error opening the console 
+ * 							or 0 if the operation was successful.
+ */
 int init_player(int *fd);
+
+/**
+ * Stops any sound playing and closes the console.
+ *
+ * @param fd  a pointer to the file descriptor.
+ *
+ * @return -1 if there was an error closing the console 
+ * 							or 0 if the operation was successful.
+ */
 int close_player(int *fd);
+
+/**
+ * Plays a melody from a .sn file.
+ *
+ * @param fd 	  a	pointer to the file descriptor.
+ * @param path  a string containing the .sn file path.
+ *
+ */
 void play_from_file(int *fd, const char *path);
-void play_note(int *fd, int freq, int duration);
+
+/**
+ * Plays during a certain time a note defined in 
+ * note_def.h header file. The note has to be
+ * read from a .sn file.
+ *
+ * @param fd 	  		a	pointer to the file descriptor.
+ * @param note  		note format read from file.
+ * @param duration  duration in milliseconds of the sound that will be played.
+ *
+ * @see note_defs.h
+ * @see play_from_file()
+ * @see play_note()
+ *
+ */
 void play_note_from_file(int *fd, int note, int duration);
+
+/**
+ * Plays during a certain time a note defined in
+ * note_def.h header file.
+ *
+ * @param fd 	  		a	pointer to the file descriptor.
+ * @param freq  		frequency in Hz of the sound that will be played.
+ * @param duration  duration in milliseconds of the sound that will be played.
+ *
+ * @see note_defs.h
+ * @see play_note_from_file()
+ *
+ */
+void play_note(int *fd, int freq, int duration);
 
 int main(int argc, char *argv[])
 {
@@ -55,16 +112,17 @@ void play_from_file(int *fd, const char *path)
 	}
 }
 
-void play_note(int *fd, int freq, int duration)
+void play_note_from_file(int *fd, int note, int duration)
 {
-	freq = freq == 0 ? 0 : 1193180/freq;
-	int arg = (duration<<16) | freq;
+	int arg = (duration << 16) | note;
 	ioctl(*fd, KDMKTONE, arg);
 	usleep(duration * 1000);
 }
 
-void play_note_from_file(int *fd, int note, int duration) {
-	int arg = (duration << 16) | note;
+void play_note(int *fd, int freq, int duration)
+{
+	freq = freq == 0 ? 0 : 1193180/freq;
+	int arg = (duration<<16) | freq;
 	ioctl(*fd, KDMKTONE, arg);
 	usleep(duration * 1000);
 }

@@ -3,14 +3,19 @@
 
 #include "note_defs.h"
 
+int convert(const char* sn_path);
 int get_note(const char* line);
 int get_duration(const char* line);
 
 int main(int argc, char *argv[])
 {
+	return convert(argv[1]);
+}
+
+int convert(const char* sn_path)
+{
 	FILE *fb, *fs;
 	char ch;
-	const char* sn_path = argv[1];
 
 	fs = fopen(sn_path, "r");
 	if (fs == NULL) {
