@@ -14,11 +14,10 @@ void play_note_from_file(int *fd, int note, int duration);
 
 int main(int argc, char *argv[])
 {
-
 	int fd;
 	init_player(&fd);
 
-	play_from_file(&fd, "internationale2.bn");
+	play_from_file(&fd, "sound.bn");
 
 	close_player(&fd);
 	return 0;
