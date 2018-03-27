@@ -50,12 +50,12 @@
 int init_player(int *fd);
 int close_player(int *fd);
 void play_note(int *fd, int freq, int duration);
-FILE *fb;
+/*FILE *fb;*/
 
 
 int main(int argc, char *argv[])
 {
-	fb = fopen("file.sb", "wb");
+	/*fb = fopen("file.sb", "wb");*/
 
 	/*FILE *fb = fopen("file.sb", "wb");*/
 	/*if (fb != NULL) {*/
@@ -70,28 +70,26 @@ int main(int argc, char *argv[])
 	int fd;
 	init_player(&fd);
 
-	play_note(&fd, G3, QUAVER);
-	play_note(&fd, C4, DOTTED(CROTCHET));
-	play_note(&fd, B3, QUAVER);
-	play_note(&fd, D4, QUAVER);
-	play_note(&fd, C4, QUAVER);
-	play_note(&fd, G3, QUAVER);
-	play_note(&fd, E3, QUAVER);
-	play_note(&fd, A3, MINIM);
-	play_note(&fd, F3, CROTCHET);
+	/*play_note(&fd, G3, QUAVER);*/
+	/*play_note(&fd, C4, DOTTED(CROTCHET));*/
+	/*play_note(&fd, B3, QUAVER);*/
+	/*play_note(&fd, D4, QUAVER);*/
+	/*play_note(&fd, C4, QUAVER);*/
+	/*play_note(&fd, G3, QUAVER);*/
+	/*play_note(&fd, E3, QUAVER);*/
+	/*play_note(&fd, A3, MINIM);*/
+	/*play_note(&fd, F3, CROTCHET);*/
 
-	play_note(&fd, REST, QUAVER);
+	/*play_note(&fd, REST, QUAVER);*/
 
-	play_note(&fd, A3, QUAVER);
-	play_note(&fd, D4, DOTTED(CROTCHET));
-	play_note(&fd, C4, QUAVER);
-	play_note(&fd, B3, QUAVER);
-	play_note(&fd, A3, QUAVER);
-	play_note(&fd, G3, QUAVER);
-	play_note(&fd, F3, QUAVER);
-	play_note(&fd, E3, MINIM);
-
-	close_player(&fd);
+	/*play_note(&fd, A3, QUAVER);*/
+	/*play_note(&fd, D4, DOTTED(CROTCHET));*/
+	/*play_note(&fd, C4, QUAVER);*/
+	/*play_note(&fd, B3, QUAVER);*/
+	/*play_note(&fd, A3, QUAVER);*/
+	/*play_note(&fd, G3, QUAVER);*/
+	/*play_note(&fd, F3, QUAVER);*/
+	/*play_note(&fd, E3, MINIM);*/
 
 	FILE *fr = fopen("file.sb", "rb");
 
@@ -99,15 +97,17 @@ int main(int argc, char *argv[])
 	short noter, durationr;
 	noter = durationr = -1;
 
-		while (durationr != 0) {
+		while (durationr != 0 || noter != 0) {
 			fread(&noter, sizeof(short), 1, fr);
 			fread(&durationr, sizeof(short), 1, fr);
 			printf("%d Hz, %d ms\n", noter, durationr);
+			play_note(&fd, noter, durationr);
 		}
 
 		fclose(fr);
 	}
 
+	close_player(&fd);
 	return 0;
 }
 
@@ -121,20 +121,22 @@ int init_player(int *fd)
 int close_player(int *fd)
 {
 	ioctl(*fd, KIOCSOUND, 0);
-	if (fb != NULL) 
-		fclose(fb);
+	/*if (fb != NULL) {*/
+		/*int end = 0;*/
+		/*fwrite(&end, sizeof(end), 1, fb);*/
+		/*fclose(fb);*/
+	/*}*/
 	return close(*fd);
 }
 
 void play_note(int *fd, int freq, int duration)
 {
-	freq = freq == 0 ? 0 : 1193180/freq;
+	/*freq = freq == 0 ? 0 : 1193180/freq;*/
 	int arg = (duration<<16) | (freq);
-	/*ioctl(*fd, KDMKTONE, arg);*/
-	/*usleep(duration * 1000);*/
-	if (fb != NULL) {
-		fwrite(&freq, sizeof(freq), 1, fb);
-		fwrite(&duration, sizeof(duration), 1, fb);
-	}
+	ioctl(*fd, KDMKTONE, arg);
+	usleep(duration * 1000);
+	/*if (fb != NULL) {*/
+		/*fwrite(&arg, sizeof(arg), 1, fb);*/
+	/*}*/
 }
 
