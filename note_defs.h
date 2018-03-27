@@ -1,0 +1,42 @@
+#define SEMIBREVE 1500
+#define DUPLEX_LONGA SEMIBREVE*8
+#define LONGA SEMIBREVE*4
+#define BREVE SEMIBREVE*2
+#define MINIM SEMIBREVE/2
+#define CROTCHET SEMIBREVE/4
+#define QUAVER SEMIBREVE/8
+#define SEMIQUAVER SEMIBREVE/16
+#define DEMISEMIQUAVER SEMIBREVE/32
+#define HEMIDEMISEMIQUAVER SEMIBREVE/64
+#define DOTTED(VALUE) (VALUE + VALUE/2)
+
+#define REST 0
+#define C3 131
+#define D3 147
+#define E3 164
+#define F3 174
+#define G3 196
+#define A3 220
+#define B3 247
+#define C4 262
+#define D4 294
+#define E4 330
+#define F4 349
+#define G4 392
+#define A4 440
+#define B4 494
+#define C5 523
+#define D5 587
+#define E5 659
+#define F5 698
+#define G5 784
+#define A5 880
+#define B5 989
+#define C6 1046
+#define D6 1175
+#define E6 1319
+#define F6 1397
+#define G6 1568
+#define A6 1760
+#define B6 1976
+
